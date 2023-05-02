@@ -5,8 +5,9 @@ source "virtualbox-iso" "centos-7-vagrant-box" {
   boot_command = [
     "<up><wait><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
   ]
-  disk_size        = 10240
-  headless         = false
+  disk_size = 10240
+  # headless  = false
+  headless         = true
   ssh_username     = "vagrant"
   ssh_password     = "vagrant"
   ssh_port         = 22
@@ -15,6 +16,7 @@ source "virtualbox-iso" "centos-7-vagrant-box" {
   vboxmanage = [
     ["modifyvm", "{{.Name}}", "--memory", "1024"],
     ["modifyvm", "{{.Name}}", "--cpus", "4"],
+    ["modifyvm", "{{.Name}}", "--nat-localhostreachable1", "on"], # https://github.com/hashicorp/packer/issues/12118
   ]
   http_directory   = "http"
   output_directory = "builds/${source.name}"
